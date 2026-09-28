@@ -4,10 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Deductive Node 1 Demo</title>
-    <!-- 외부 스타일시트 연결 -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- 🌟 [추가] 초기 빗소리 인지를 강제하고 오디오 정책을 해제하는 온보딩 시작 레이어 -->
+    <div id="startOverlay" class="start-overlay">
+        <div class="start-card">
+            <h2>🌧️ 시제 엣지 온보딩 레슨</h2>
+            <p>아침에 눈을 떠보니 밖에서 은은한 빗소리가 들려옵니다.</p>
+            <button class="start-btn" onclick="startLesson()">체험 시작하기</button>
+        </div>
+    </div>
 
     <!-- 타겟 노드 표현 (처음엔 숨김) -->
     <div id="targetSentence" class="target-sentence">"It's raining outside right now."</div>
@@ -26,7 +34,6 @@
         <button class="ccq-btn" onclick="finishDemo()">Yes, right now!</button>
     </div>
 
-    <!-- 외부 자바스크립트 연결 -->
     <script src="script.js"></script>
 </body>
 </html>
