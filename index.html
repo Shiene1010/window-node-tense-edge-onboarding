@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Deductive Node 1 Demo</title>
+    <!-- 외부 스타일시트 연결 -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 타겟 노드 표현 (처음엔 숨김) -->
+    <div id="targetSentence" class="target-sentence">"It's raining outside right now."</div>
+
+    <!-- 베란다 창문 (인터랙션 구역) -->
+    <div id="windowFrame" class="window-frame" onclick="triggerNode1()">
+        <div class="rain-bg" id="rainBg"></div>
+        <div class="curtain curtain-left"></div>
+        <div class="curtain curtain-right"></div>
+        <div class="guide-hint">👇 커튼을 열어 확인하세요</div>
+    </div>
+
+    <!-- 검증용 CCQ 패널 (커튼이 열리면 등장) -->
+    <div id="ccqPanel" class="ccq-panel">
+        <div class="ccq-title">💡 [CCQ] Is it raining NOW?</div>
+        <button class="ccq-btn" onclick="finishDemo()">Yes, right now!</button>
+    </div>
+
+    <!-- 외부 자바스크립트 연결 -->
+    <script src="script.js"></script>
+</body>
+</html>

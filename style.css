@@ -1,0 +1,173 @@
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+body { 
+    background: #12131a; 
+    color: #fff; 
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    height: 100vh; 
+    padding: 24px; 
+    overflow: hidden; 
+}
+
+/* 타겟 표현 영역 */
+.target-sentence { 
+    font-size: 1.6rem; 
+    font-weight: bold; 
+    color: #00ffcc; 
+    text-align: center; 
+    margin-top: 10px; 
+    min-height: 40px; 
+    transition: opacity 0.5s; 
+    opacity: 0; 
+}
+.target-sentence.show { 
+    opacity: 1; 
+}
+
+/* 베란다 창문 컨테이너 (아파트 거실창 비율) */
+.window-frame { 
+    width: 100%; 
+    height: 55vh; 
+    background: #0f1016; 
+    border: 6px solid #2d3142; /* 모던한 거실 창틀 느낌 */
+    border-radius: 16px; 
+    position: relative; 
+    overflow: hidden; 
+    cursor: pointer; 
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); 
+}
+
+/* ❌ 모니터 고장 같은 가로줄 제거 ➔ ⭕ 실시간 사선 빗줄기 효과 */
+.rain-bg { 
+    position: absolute; 
+    width: 100%; 
+    height: 100%; 
+    background: linear-gradient(to bottom, #141526, #090a10); 
+    display: none; 
+}
+.rain-bg::before { 
+    content: ""; 
+    position: absolute; 
+    width: 100%; 
+    height: 100%; 
+    /* 미세하고 선명한 사선 빗줄기 텍스처 구현 */
+    background-image: linear-gradient(105deg, rgba(255, 255, 255, 0.4) 0px, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+    background-size: 30px 120px; 
+    animation: rainFalling 0.4s linear infinite; 
+}
+@keyframes rainFalling { 
+    0% { background-position: 0px 0px; } 
+    100% { background-position: -30px 120px; } /* 왼쪽 아래로 빠르게 떨어지는 모션 */
+}
+
+/* 아파트 거실 원단 느낌의 세로 주름 커튼 디자인 */
+.curtain { 
+    position: absolute; 
+    width: 50%; 
+    height: 100%; 
+    /* 반복 그라데이션으로 거실 패브릭 커튼의 입체적인 세로 주름(Pleats) 표현 */
+    background: linear-gradient(to right, 
+        #721c1c 0%, #8b2525 25%, #a63232 50%, #8b2525 75%, #631717 100%
+    );
+    background-size: 40px 100%; /* 주름 간격 조절 */
+    transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1); 
+    z-index: 2; 
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+}
+.curtain-left { 
+    left: 0; 
+    border-right: 3px solid #3a0d0d; 
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5); /* 가운데 겹치는 부분 음영 추가 */
+}
+.curtain-right { 
+    right: 0; 
+    border-left: 3px solid #3a0d0d; 
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5); 
+}
+
+/* 커튼이 걷힐 때 아파트 거실 주름 커튼처럼 촥 접히는 연출 */
+.window-frame.open .curtain-left { 
+    transform: scaleX(0.15) translateX(-80%); 
+    transform-origin: left center;
+}
+.window-frame.open .curtain-right { 
+    transform: scaleX(0.15) translateX(80%); 
+    transform-origin: right center;
+}
+
+/* 인터랙션 가이드 힌트 */
+.guide-hint { 
+    position: absolute; 
+    width: 100%; 
+    text-align: center; 
+    bottom: 24px; 
+    z-index: 3; 
+    pointer-events: none; 
+    color: #fff; 
+    font-weight: bold; 
+    font-size: 1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.5); 
+    padding: 8px 0; 
+    animation: blink 1.8s infinite; 
+}
+@keyframes blink { 
+    0%, 100% { opacity: 0.4; } 
+    50% { opacity: 1; } 
+}
+.window-frame.open .guide-hint { 
+    display: none; 
+}
+
+/* CCQ 검증 영역 */
+.ccq-panel { 
+    background: rgba(255, 255, 255, 0.06); 
+    border: 1px solid rgba(255, 255, 255, 0.12); 
+    padding: 20px; 
+    border-radius: 14px; 
+    text-align: center; 
+    transform: translateY(60px); 
+    opacity: 0; 
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
+    pointer-events: none; 
+    margin-bottom: 10px; 
+    backdrop-filter: blur(8px); /* 모던한 블러 배경 효과 */
+}
+.ccq-panel.show { 
+    transform: translateY(0); 
+    opacity: 1; 
+    pointer-events: auto; 
+}
+.ccq-title { 
+    font-size: 1.1rem; 
+    color: #ffcc00; 
+    font-weight: bold; 
+    margin-bottom: 14px; 
+    letter-spacing: -0.5px;
+}
+.ccq-btn { 
+    width: 100%; 
+    padding: 16px; 
+    background: #00ffcc; 
+    border: none; 
+    border-radius: 10px; 
+    color: #111; 
+    font-size: 1.1rem; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: background 0.2s, transform 0.1s; 
+}
+.ccq-btn:hover {
+    background: #05ffd0;
+}
+.ccq-btn:active { 
+    background: #00b390; 
+    transform: scale(0.99);
+}
