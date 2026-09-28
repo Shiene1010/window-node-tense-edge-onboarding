@@ -1,231 +1,234 @@
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
+/* --- 기본 리셋 및 모바일 레이아웃 공통 구성 --- */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #121214;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #ffffff;
+    overflow-x: hidden;
 }
 
-body { 
-    background: #12131a; 
-    color: #fff; 
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between; 
-    height: 100vh; 
-    padding: 24px; 
-    overflow: hidden; 
-}
-
-/* 타겟 표현 영역 */
-.target-sentence { 
-    font-size: 1.6rem; 
-    font-weight: bold; 
-    color: #00ffcc; 
-    text-align: center; 
-    margin-top: 10px; 
-    min-height: 40px; 
-    transition: opacity 0.5s; 
-    opacity: 0; 
-}
-.target-sentence.show { 
-    opacity: 1; 
-}
-
-/* 베란다 창문 컨테이너 (아파트 거실창 비율) */
-.window-frame { 
-    width: 100%; 
-    height: 55vh; 
-    background: #0f1016; 
-    border: 6px solid #2d3142; /* 모던한 거실 창틀 느낌 */
-    border-radius: 16px; 
-    position: relative; 
-    overflow: hidden; 
-    cursor: pointer; 
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); 
-}
-
-/* ❌ 모니터 고장 같은 가로줄 제거 ➔ ⭕ 실시간 사선 빗줄기 효과 */
-.rain-bg { 
-    position: absolute; 
-    width: 100%; 
-    height: 100%; 
-    background: linear-gradient(to bottom, #141526, #090a10); 
-    display: none; 
-}
-.rain-bg::before { 
-    content: ""; 
-    position: absolute; 
-    width: 100%; 
-    height: 100%; 
-    /* 미세하고 선명한 사선 빗줄기 텍스처 구현 */
-    background-image: linear-gradient(105deg, rgba(255, 255, 255, 0.4) 0px, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
-    background-size: 30px 120px; 
-    animation: rainFalling 0.4s linear infinite; 
-}
-@keyframes rainFalling { 
-    0% { background-position: 0px 0px; } 
-    100% { background-position: -30px 120px; } /* 왼쪽 아래로 빠르게 떨어지는 모션 */
-}
-
-/* 아파트 거실 원단 느낌의 세로 주름 커튼 디자인 */
-.curtain { 
-    position: absolute; 
-    width: 50%; 
-    height: 100%; 
-    /* 반복 그라데이션으로 거실 패브릭 커튼의 입체적인 세로 주름(Pleats) 표현 */
-    background: linear-gradient(to right, 
-        #721c1c 0%, #8b2525 25%, #a63232 50%, #8b2525 75%, #631717 100%
-    );
-    background-size: 40px 100%; /* 주름 간격 조절 */
-    transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1); 
-    z-index: 2; 
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
-}
-.curtain-left { 
-    left: 0; 
-    border-right: 3px solid #3a0d0d; 
-    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5); /* 가운데 겹치는 부분 음영 추가 */
-}
-.curtain-right { 
-    right: 0; 
-    border-left: 3px solid #3a0d0d; 
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5); 
-}
-
-/* 커튼이 걷힐 때 아파트 거실 주름 커튼처럼 촥 접히는 연출 */
-.window-frame.open .curtain-left { 
-    transform: scaleX(0.15) translateX(-80%); 
-    transform-origin: left center;
-}
-.window-frame.open .curtain-right { 
-    transform: scaleX(0.15) translateX(80%); 
-    transform-origin: right center;
-}
-
-/* 인터랙션 가이드 힌트 */
-.guide-hint { 
-    position: absolute; 
-    width: 100%; 
-    text-align: center; 
-    bottom: 24px; 
-    z-index: 3; 
-    pointer-events: none; 
-    color: #fff; 
-    font-weight: bold; 
-    font-size: 1rem;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-    background: rgba(0, 0, 0, 0.5); 
-    padding: 8px 0; 
-    animation: blink 1.8s infinite; 
-}
-@keyframes blink { 
-    0%, 100% { opacity: 0.4; } 
-    50% { opacity: 1; } 
-}
-.window-frame.open .guide-hint { 
-    display: none; 
-}
-
-/* CCQ 검증 영역 */
-.ccq-panel { 
-    background: rgba(255, 255, 255, 0.06); 
-    border: 1px solid rgba(255, 255, 255, 0.12); 
-    padding: 20px; 
-    border-radius: 14px; 
-    text-align: center; 
-    transform: translateY(60px); 
-    opacity: 0; 
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
-    pointer-events: none; 
-    margin-bottom: 10px; 
-    backdrop-filter: blur(8px); /* 모던한 블러 배경 효과 */
-}
-.ccq-panel.show { 
-    transform: translateY(0); 
-    opacity: 1; 
-    pointer-events: auto; 
-}
-.ccq-title { 
-    font-size: 1.1rem; 
-    color: #ffcc00; 
-    font-weight: bold; 
-    margin-bottom: 14px; 
-    letter-spacing: -0.5px;
-}
-.ccq-btn { 
-    width: 100%; 
-    padding: 16px; 
-    background: #00ffcc; 
-    border: none; 
-    border-radius: 10px; 
-    color: #111; 
-    font-size: 1.1rem; 
-    font-weight: bold; 
-    cursor: pointer; 
-    transition: background 0.2s, transform 0.1s; 
-}
-.ccq-btn:hover {
-    background: #05ffd0;
-}
-.ccq-btn:active { 
-    background: #00b390; 
-    transform: scale(0.99);
-}
-
-/* 시작 오버레이 화면 스타일 */
+/* --- 온보딩 스플래시 오버레이 스타일 --- */
 .start-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #0b0c10;
-    z-index: 999;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(18, 18, 20, 0.95);
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    transition: opacity 0.5s ease, pointer-events 0.5s ease;
+    transition: opacity 0.5s ease;
 }
-
 .start-card {
-    background: #1f2833;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 30px 20px;
+    background: #1e1e24;
+    padding: 30px;
     border-radius: 16px;
     text-align: center;
-    max-width: 340px;
-    width: 100%;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    max-width: 320px;
+    width: 90%;
 }
-
-.start-card h2 {
-    font-size: 1.4rem;
-    color: #00ffcc;
-    margin-bottom: 12px;
-}
-
-.start-card p {
-    font-size: 0.95rem;
-    color: #c5a1a1;
-    line-height: 1.5;
-    margin-bottom: 24px;
-}
-
 .start-btn {
-    width: 100%;
-    padding: 15px;
-    background: #00ffcc;
+    background: #06d6a0;
+    color: white;
     border: none;
-    border-radius: 10px;
-    color: #111;
+    padding: 14px 28px;
     font-size: 1.1rem;
     font-weight: bold;
+    border-radius: 30px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,255,204,0.3);
-    transition: background 0.2s;
+    margin-top: 15px;
+    width: 100%;
 }
 
-.start-btn:active {
-    background: #00b390;
+/* --- 화면 전환 컴포넌트의 핵심 뼈대 --- */
+.node-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
+    opacity: 1;
+    transform: translateY(0);
 }
+.node-container.is-hidden {
+    display: none !important;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* --- NODE 1 스타일 시트 고도화 --- */
+.target-sentence {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.target-sentence.show { opacity: 1; }
+
+.window-frame {
+    position: relative;
+    width: 280px;
+    height: 350px;
+    background: #2a2a30;
+    border: 8px solid #3e3e46;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+}
+.rain-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(50,50,50,0.5), rgba(20,20,30,0.8));
+    display: none;
+}
+.curtain {
+    position: absolute;
+    top: 0; width: 50%; height: 100%;
+    background: #f25c54;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 2;
+}
+.curtain-left { left: 0; transform-origin: left; }
+.curtain-right { right: 0; transform-origin: right; }
+.window-frame.open .curtain-left { transform: scaleX(0.1); }
+.window-frame.open .curtain-right { transform: scaleX(0.1); }
+
+.guide-hint {
+    position: absolute;
+    bottom: 20px; width: 100%; text-align: center;
+    z-index: 3; color: #fff; font-weight: bold;
+    pointer-events: none;
+}
+.window-frame.open .guide-hint { display: none; }
+
+.ccq-panel {
+    margin-top: 30px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+    text-align: center;
+}
+.ccq-panel.show { opacity: 1; transform: translateY(0); }
+.ccq-title { font-size: 1.1rem; margin-bottom: 15px; color: #ffd166; }
+.ccq-btn {
+    background: #ffd166; color: #121214; border: none;
+    padding: 12px 35px; border-radius: 25px; font-weight: bold; cursor: pointer;
+}
+
+/* --- NODE 2: 교실 뷰포트 인지 엔진 그래픽스 --- */
+.classroom-viewport {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 320px;
+    background: #3a2e2b;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.7);
+}
+
+.sunny-sky {
+    position: absolute;
+    top: 10%; left: 10%; width: 80%; height: 45%;
+    background: linear-gradient(180deg, #7ec8f8 0%, #cae9ff 100%);
+    border-radius: 4px;
+    z-index: 1;
+}
+.sunlight-beam {
+    position: absolute;
+    top: -10%; left: -30%; width: 150%; height: 120%;
+    background: linear-gradient(135deg, rgba(255,255,200,0.25) 0%, rgba(255,255,200,0) 60%);
+    transform: rotate(-10deg);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.classroom-window-frame {
+    position: absolute;
+    top: 10%; left: 10%; width: 80%; height: 45%;
+    border: 6px solid #5c4033;
+    box-sizing: border-box;
+    z-index: 2;
+}
+.window-glass { position: relative; width: 100%; height: 100%; overflow: hidden; }
+
+/* 빗방울 잔상 애니메이션 효과 */
+.rain-streak {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    width: 2px;
+    border-radius: 50%;
+}
+.streak-1 { height: 20px; top: -20px; left: 30%; animation: dropStreak 4s infinite linear; }
+.streak-2 { height: 15px; top: -20px; left: 70%; animation: dropStreak 5s infinite linear 1.5s; }
+
+@keyframes dropStreak {
+    0% { top: -20px; opacity: 0; }
+    5% { opacity: 0.7; }
+    80% { top: 100%; opacity: 0.1; }
+    100% { top: 100%; opacity: 0; }
+}
+
+/* 물웅덩이(Water Puddles) 바닥 디자인 */
+.water-puddles-container {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 40%;
+    background: rgba(45, 35, 30, 0.9);
+    z-index: 4;
+}
+.puddle {
+    position: absolute;
+    background: rgba(100, 145, 190, 0.35);
+    border-radius: 50%;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.4), 0 0 4px rgba(255,255,255,0.1);
+}
+.puddle-1 { width: 90px; height: 14px; bottom: 35px; left: 40px; transform: rotate(-1deg); }
+.puddle-2 { width: 55px; height: 10px; bottom: 25px; right: 50px; transform: rotate(2deg); }
+
+.puddle-ripple {
+    position: absolute;
+    bottom: 40px; left: 80px; width: 20px; height: 5px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+    pointer-events: none;
+}
+
+.cognitive-hint {
+    position: absolute;
+    bottom: 8px; width: 100%; text-align: center;
+    font-size: 0.8rem; color: rgba(255,255,255,0.35);
+    font-style: italic;
+}
+
+/* --- NODE 2 하단 교육 패널 및 옵션 배열 --- */
+.educational-panel {
+    width: 100%; max-width: 400px; text-align: center; margin-top: 25px;
+}
+.tense-edge-highlight {
+    color: #ffd166; font-weight: 800; text-shadow: 0 0 10px rgba(255,209,102,0.3);
+}
+.time-anchor { color: #f25c54; text-decoration: underline; }
+
+.ccq-panel-node2 { margin-top: 15px; }
+.ccq-question { font-size: 1.1rem; margin-bottom: 15px; color: #ffffff; }
+.ccq-options { display: flex; flex-direction: column; gap: 10px; }
+
+.btn-ccq {
+    padding: 14px; border: none; border-radius: 30px;
+    font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.25s;
+}
+.btn-wrong { background: #2a2a30; color: #999; }
+.btn-wrong:hover { background: #35353d; }
+.btn-correct { background: #06d6a0; color: #fff; box-shadow: 0 4px 15px rgba(6,214,160,0.25); }
+.btn-correct:hover { transform: scale(1.02); }
+
+.ccq-feedback { margin-top: 15px; font-size: 0.95rem; line-height: 1.5; padding: 10px; border-radius: 8px; }
