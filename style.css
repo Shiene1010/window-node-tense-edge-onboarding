@@ -2,7 +2,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #121214;
+    background-color: #0c0c0e;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: #ffffff;
     overflow-x: hidden;
@@ -12,7 +12,7 @@ body {
 .start-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(18, 18, 20, 0.95);
+    background: rgba(10, 10, 12, 0.97);
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -20,26 +20,30 @@ body {
     transition: opacity 0.5s ease;
 }
 .start-card {
-    background: #1e1e24;
-    padding: 30px;
-    border-radius: 16px;
+    background: #17171c;
+    padding: 35px 25px;
+    border-radius: 20px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    max-width: 320px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    max-width: 340px;
     width: 90%;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 .start-btn {
     background: #06d6a0;
     color: white;
     border: none;
-    padding: 14px 28px;
+    padding: 16px 28px;
     font-size: 1.1rem;
     font-weight: bold;
     border-radius: 30px;
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 20px;
     width: 100%;
+    box-shadow: 0 5px 15px rgba(6,214,160,0.3);
+    transition: transform 0.2s;
 }
+.start-btn:active { transform: scale(0.98); }
 
 /* --- 화면 전환 컴포넌트의 핵심 뼈대 --- */
 .node-container {
@@ -58,254 +62,200 @@ body {
 .node-container.is-hidden {
     display: none !important;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
 }
 
-/* --- NODE 1 스타일 시트 --- */
+/* --- NODE 1: 현재진행형 (아늑한 방 안의 대조) --- */
+.room-glow {
+    padding: 15px;
+    background: radial-gradient(circle, rgba(244,162,97,0.15) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 24px;
+}
 .target-sentence {
-    font-size: 1.4rem;
-    font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: 700;
     margin-bottom: 25px;
     text-align: center;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    letter-spacing: -0.5px;
+    transition: opacity 0.6s ease;
 }
 .target-sentence.show { opacity: 1; }
 
 .window-frame {
     position: relative;
-    width: 280px;
-    height: 350px;
-    background: #2a2a30;
-    border: 8px solid #3e3e46;
-    border-radius: 8px;
+    width: 290px;
+    height: 360px;
+    background: #1e1e24;
+    border: 10px solid #2b2b33;
+    border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 .rain-bg {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to bottom, rgba(50,50,50,0.5), rgba(20,20,30,0.8));
+    background: #0f1115;
     display: none;
 }
+/* 고도화된 스톰 폭우 레이어 효과 */
+.heavy-rain-layer {
+    position: absolute;
+    width: 100%; height: 200%;
+    top: -100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 100%),
+                radial-gradient(circle, rgba(100,150,255,0.1) 1px, transparent 1px);
+    background-size: 100% 100px, 15px 30px;
+}
+.layer-1 { animation: stormRainFall 0.8s infinite linear; }
+.layer-2 { animation: stormRainFall 0.5s infinite linear 0.2s; filter: blur(1px); opacity: 0.6; }
+
+@keyframes stormRainFall {
+    0% { transform: translateY(0) skewX(-10deg); }
+    100% { transform: translateY(50%) skewX(-10deg); }
+}
+
 .curtain {
     position: absolute;
     top: 0; width: 50%; height: 100%;
-    background: #f25c54;
-    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    background: #c3423f;
+    transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
     z-index: 2;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
-.curtain-left { left: 0; transform-origin: left; }
-.curtain-right { right: 0; transform-origin: right; }
-.window-frame.open .curtain-left { transform: scaleX(0.1); }
-.window-frame.open .curtain-right { transform: scaleX(0.1); }
+.curtain-left { left: 0; transform-origin: left; border-right: 1px solid #9a3330; }
+.curtain-right { right: 0; transform-origin: right; border-left: 1px solid #9a3330; }
+.window-frame.open .curtain-left { transform: scaleX(0.08); }
+.window-frame.open .curtain-right { transform: scaleX(0.08); }
 
 .guide-hint {
     position: absolute;
-    bottom: 20px; width: 100%; text-align: center;
+    bottom: 25px; width: 100%; text-align: center;
     z-index: 3; color: #fff; font-weight: bold;
+    font-size: 0.9rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8);
     pointer-events: none;
+    animation: flashHint 1.5s infinite ease-in-out;
 }
+@keyframes flashHint { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 .window-frame.open .guide-hint { display: none; }
 
 .ccq-panel {
-    margin-top: 30px;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.5s ease;
-    text-align: center;
+    margin-top: 30px; opacity: 0; transform: translateY(15px);
+    transition: all 0.6s ease; text-align: center;
 }
 .ccq-panel.show { opacity: 1; transform: translateY(0); }
-.ccq-title { font-size: 1.1rem; margin-bottom: 15px; color: #ffd166; }
+.ccq-title { font-size: 1.2rem; margin-bottom: 15px; color: #ffd166; font-weight: bold; }
 .ccq-btn {
-    background: #ffd166; color: #121214; border: none;
-    padding: 12px 35px; border-radius: 25px; font-weight: bold; cursor: pointer;
+    background: #ffd166; color: #121214; border: none; padding: 14px 40px;
+    border-radius: 30px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(255,209,102,0.2);
 }
 
-/* --- NODE 2: 교실 뷰포트 스타일 --- */
+/* --- NODE 2: 과거형 노드 (맑은 날 속 남겨진 흔적) --- */
 .classroom-viewport {
     position: relative;
-    width: 100%;
-    max-width: 400px;
-    height: 320px;
-    background: #3a2e2b;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.7);
+    width: 100%; max-width: 410px; height: 330px;
+    background: #2f2522; border-radius: 20px; overflow: hidden;
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.8), 0 15px 30px rgba(0,0,0,0.4);
 }
-
 .sunny-sky {
-    position: absolute;
-    top: 10%; left: 10%; width: 80%; height: 45%;
-    background: linear-gradient(180deg, #7ec8f8 0%, #cae9ff 100%);
-    border-radius: 4px;
-    z-index: 1;
+    position: absolute; top: 8%; left: 8%; width: 84%; height: 48%;
+    background: linear-gradient(180deg, #53b3f7 0%, #bfe3ff 100%);
+    border-radius: 6px; z-index: 1;
+}
+/* 눈부신 태양의 잔상 렌즈플레어 코어 */
+.lens-flare {
+    position: absolute; top: 12%; left: 20%; width: 40px; height: 40px;
+    background: #ffffff; border-radius: 50%; z-index: 2;
+    box-shadow: 0 0 40px 20px #ffffff, 0 0 100px 50px rgba(255,235,150,0.6);
 }
 .sunlight-beam {
-    position: absolute;
-    top: -10%; left: -30%; width: 150%; height: 120%;
-    background: linear-gradient(135deg, rgba(255,255,200,0.25) 0%, rgba(255,255,200,0) 60%);
-    transform: rotate(-10deg);
-    z-index: 3;
-    pointer-events: none;
+    position: absolute; top: -20%; left: -40%; width: 160%; height: 140%;
+    background: linear-gradient(135deg, rgba(255,255,220,0.3) 0%, rgba(255,255,220,0) 65%);
+    transform: rotate(-8deg); z-index: 3; pointer-events: none;
 }
-
 .classroom-window-frame {
-    position: absolute;
-    top: 10%; left: 10%; width: 80%; height: 45%;
-    border: 6px solid #5c4033;
-    box-sizing: border-box;
-    z-index: 2;
-}
-.window-glass { position: relative; width: 100%; height: 100%; overflow: hidden; }
-
-.rain-streak {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.4);
-    width: 2px;
-    border-radius: 50%;
-}
-.streak-1 { height: 20px; top: -20px; left: 30%; animation: dropStreak 4s infinite linear; }
-.streak-2 { height: 15px; top: -20px; left: 70%; animation: dropStreak 5s infinite linear 1.5s; }
-
-@keyframes dropStreak {
-    0% { top: -20px; opacity: 0; }
-    5% { opacity: 0.7; }
-    80% { top: 100%; opacity: 0.1; }
-    100% { top: 100%; opacity: 0; }
+    position: absolute; top: 8%; left: 8%; width: 84%; height: 48%;
+    border: 8px solid #4a3429; box-sizing: border-box; z-index: 2;
 }
 
+/* 물웅덩이 물리적 웨이브 루프 애니메이션 */
 .water-puddles-container {
-    position: absolute;
-    bottom: 0; left: 0; width: 100%; height: 40%;
-    background: rgba(45, 35, 30, 0.9);
-    z-index: 4;
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 42%;
+    background: rgba(38, 29, 26, 0.95); z-index: 4; border-top: 2px solid #231b19;
 }
 .puddle {
-    position: absolute;
-    background: rgba(100, 145, 190, 0.35);
-    border-radius: 50%;
-    box-shadow: inset 0 0 8px rgba(0,0,0,0.4), 0 0 4px rgba(255,255,255,0.1);
+    position: absolute; background: rgba(90, 135, 180, 0.4); border-radius: 50%;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 1px 3px rgba(255,255,255,0.15);
+    overflow: hidden;
 }
-.puddle-1 { width: 90px; height: 14px; bottom: 35px; left: 40px; transform: rotate(-1deg); }
-.puddle-2 { width: 55px; height: 10px; bottom: 25px; right: 50px; transform: rotate(2deg); }
+.puddle-1 { width: 110px; height: 16px; bottom: 40px; left: 35px; }
+.puddle-2 { width: 65px; height: 11px; bottom: 25px; right: 45px; }
 
-.puddle-ripple {
-    position: absolute;
-    bottom: 40px; left: 80px; width: 20px; height: 5px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-    transform: scale(0);
-    opacity: 0;
-    transition: transform 0.6s ease-out, opacity 0.6s ease-out;
-    pointer-events: none;
+/* 웅덩이 내부 동적 물결 반사선 */
+.ripple-wave {
+    position: absolute; top: 20%; left: 10%; width: 80%; height: 2px;
+    background: rgba(255,255,255,0.25); border-radius: 50%;
 }
+.wave-a { animation: puddleWave 3s infinite ease-in-out; }
+.wave-b { animation: puddleWave 2.5s infinite ease-in-out 0.5s; }
 
-.cognitive-hint {
-    position: absolute;
-    bottom: 8px; width: 100%; text-align: center;
-    font-size: 0.8rem; color: rgba(255,255,255,0.35);
-    font-style: italic;
+@keyframes puddleWave { 0%, 100% { transform: translateY(0) scaleX(0.9); opacity: 0.2; } 50% { transform: translateY(3px) scaleX(1.1); opacity: 0.6; } }
+
+/* --- NODE 3: 미래 예측형 노드 (기후 격변과 계측 UI) --- */
+.dynamic-storm-bg { background: #1a1513 !important; }
+.foggy-glass-layer {
+    position: absolute; top: 10%; left: 10%; width: 80%; height: 45%;
+    background: rgba(255, 255, 255, 0.08); filter: blur(3px); z-index: 2; pointer-events: none;
 }
 
-/* --- NODE 3 스타일 디자인 --- */
-.dynamic-storm-bg {
-    background: #1f1a18 !important;
-}
-.dark-clouds {
-    position: absolute;
-    top: 10%; left: 10%; width: 80%; height: 45%;
-    background: linear-gradient(180deg, #2b323c 0%, #15181f 100%);
-    border-radius: 4px;
-    z-index: 1;
-    animation: cloudsGather 6s infinite alternate ease-in-out;
-}
-@keyframes cloudsGather {
-    0% { filter: brightness(1.0); }
-    100% { filter: brightness(0.6); }
-}
-
-.lightning-flash {
-    position: absolute;
-    top: 10%; left: 10%; width: 80%; height: 45%;
-    background: rgba(255, 255, 255, 0.9);
-    z-index: 2;
-    opacity: 0;
-    pointer-events: none;
-    animation: flashTrigger 7s infinite steps(1) 2s;
-}
-@keyframes flashTrigger {
-    0%, 92%, 100% { opacity: 0; }
-    93% { opacity: 0.6; }
-    94% { opacity: 0; }
-    96% { opacity: 0.8; }
-    97% { opacity: 0; }
-}
-
-.storm-border {
-    border-color: #3a2a22 !important;
-}
-
-.wind-particle {
-    position: absolute;
-    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,200,0.2));
-    height: 1px;
-}
-.particle-1 { width: 100px; top: 30%; left: -100px; animation: windBlow 2.5s infinite linear; }
-.particle-2 { width: 140px; top: 60%; left: -140px; animation: windBlow 1.8s infinite linear 0.5s; }
-
-@keyframes windBlow {
-    0% { left: -150px; transform: skewY(-5deg); opacity: 0; }
-    50% { opacity: 1; }
-    100% { left: 110%; transform: skewY(-5deg); opacity: 0; }
-}
-
+/* 아날로그 기압계 UI 시스템 */
 .predictive-indicator-box {
-    position: absolute;
-    bottom: 0; left: 0; width: 100%; height: 40%;
-    background: rgba(20, 20, 25, 0.85);
-    z-index: 4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 42%;
+    background: linear-gradient(to top, #111115 0%, #1a1a24 100%);
+    z-index: 4; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border-top: 2px solid #2c2c3a;
 }
-.barometer-icon {
-    font-size: 2rem;
-    animation: warningPulse 1.5s infinite ease-in-out;
+.barometer-gauge {
+    position: relative; width: 140px; height: 45px;
+    background: #252530; border-radius: 40px 40px 0 0;
+    border: 3px solid #3e3e52; border-bottom: none;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px;
 }
-@keyframes warningPulse {
-    0%, 100% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.15); opacity: 1; }
+.barometer-pointer {
+    position: absolute; bottom: 0; left: 50%; width: 4px; height: 35px;
+    background: #f25c54; transform-origin: bottom center;
+    border-radius: 2px;
+    animation: gaugeOscillate 1.8s infinite ease-in-out alternate;
 }
-.cognitive-hint-alert {
-    margin-top: 5px; font-size: 0.85rem; color: #f25c54; font-weight: bold;
+@keyframes gaugeOscillate {
+    0% { transform: translateX(-50%) rotate(20deg); }
+    100% { transform: translateX(-50%) rotate(75deg); } /* 우측 위험수위로 기울어짐 */
 }
+.barometer-text { font-size: 0.7rem; font-weight: bold; color: #f25c54; letter-spacing: 1px; z-index: 5; }
+.cognitive-hint-alert { margin-top: 10px; font-size: 0.85rem; color: #f25c54; font-weight: 600; }
 
-/* --- 교육용 글로벌 타이포그래피 공통 정의 --- */
-.educational-panel {
-    width: 100%; max-width: 400px; text-align: center; margin-top: 25px;
-}
-.tense-edge-highlight {
-    color: #ffd166; font-weight: 800; text-shadow: 0 0 10px rgba(255,209,102,0.3);
-}
+/* --- 교육 콘텐츠 공통 레이아웃 구성 --- */
 .predictive-edge-highlight {
-    color: #f25c54; font-weight: 800; text-shadow: 0 0 12px rgba(242,92,84,0.4);
+    color: #f25c54; font-weight: 800; text-shadow: 0 0 15px rgba(242,92,84,0.5);
 }
-.time-anchor { color: #06d6a0; text-decoration: underline; }
-.time-anchor-future { color: #f25c54; font-weight: bold; text-decoration: underline; }
+.time-anchor-future { color: #f25c54; font-weight: 700; text-decoration: underline; }
 
-.ccq-panel-node2, .ccq-panel-node3 { margin-top: 15px; }
-.ccq-question { font-size: 1.05rem; margin-bottom: 15px; color: #ffffff; line-height: 1.4; }
-.ccq-options { display: flex; flex-direction: column; gap: 10px; }
+.ccq-panel-node2, .ccq-panel-node3 { margin-top: 15px; width: 100%; }
+.ccq-question { font-size: 1.1rem; margin-bottom: 15px; color: #e2e2e9; line-height: 1.4; text-align: center; }
+.ccq-options { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
 .btn-ccq {
-    padding: 14px; border: none; border-radius: 30px;
-    font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: all 0.25s;
+    padding: 15px; border: none; border-radius: 14px;
+    font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
-.btn-wrong { background: #2a2a30; color: #999; }
-.btn-wrong:hover { background: #35353d; }
-.btn-correct { background: #06d6a0; color: #fff; box-shadow: 0 4px 15px rgba(6,214,160,0.25); }
-.btn-correct:hover { transform: scale(1.02); }
+.btn-wrong { background: #22222a; color: #8a8a9e; border: 1px solid rgba(255,255,255,0.05); }
+.btn-wrong:hover { background: #2b2b35; color: #a1a1ba; }
+.btn-correct { background: #06d6a0; color: #fff; }
+.btn-correct:hover { background: #05be8e; transform: translateY(-1px); }
 
-.ccq-feedback { margin-top: 15px; font-size: 0.95rem; line-height: 1.5; padding: 10px; border-radius: 8px; }
+.ccq-feedback {
+    margin-top: 15px; font-size: 0.95rem; line-height: 1.5; padding: 12px;
+    border-radius: 10px; background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.1);
+}

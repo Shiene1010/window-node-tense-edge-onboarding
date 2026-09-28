@@ -8,27 +8,24 @@ let dripInterval = null;    // 노드 2용 물방울 스케줄러
 let tensionOsc = null;      // 노드 3용 미래 예측 긴장감 고조 오실레이터
 let tensionGain = null;     // 긴장감 볼륨 제어 노드
 
-// 1. 온보딩 시작하기 버튼을 명확히 터치했을 때 호출되는 오디오 초기화 함수
+// 1. 온보딩 시작하기 버튼 가동 및 오디오 활성화
 function startLesson() {
     if (isAudioInitialized) return;
     try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContext();
         
-        // 브라우저 자동재생 보안 정책 우회 및 강제 가동
         if (audioCtx.state === 'suspended') {
             audioCtx.resume();
         }
 
         gainNode = audioCtx.createGain();
-        // 초기 볼륨 설정
         gainNode.gain.setValueAtTime(0.18, audioCtx.currentTime);
         
         const bufferSize = 2 * audioCtx.sampleRate;
         const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const output = noiseBuffer.getChannelData(0);
         
-        // 실시간 빗소리용 화이트 노이즈 합성
         for (let i = 0; i < bufferSize; i++) {
             output[i] = Math.random() * 2 - 1;
         }
@@ -39,7 +36,7 @@ function startLesson() {
         
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1100, audioCtx.currentTime); // 빗소리 톤 보정
+        filter.frequency.setValueAtTime(1100, audioCtx.currentTime);
         
         whiteNoise.connect(filter);
         filter.connect(gainNode);
@@ -47,9 +44,8 @@ function startLesson() {
         
         whiteNoise.start();
         isAudioInitialized = true;
-        console.log("🔊 웹 오디오 가동 완료: 실시간 노이즈 노드가 연동되었습니다.");
+        console.log("🔊 웹 오디오 가동 완료: 노드 1 메인 노이즈 루프 연동 성공");
         
-        // UI에서 온보딩 오버레이 레이어 제거
         const overlay = document.getElementById('startOverlay');
         if (overlay) {
             overlay.style.opacity = '0';
@@ -71,7 +67,6 @@ function triggerNode1() {
         document.getElementById('rainBg').style.display = 'block';
         document.getElementById('targetSentence').classList.add('show');
         
-        // 커튼을 치면 빗소리가 웅장하게 밀려오도록 증폭
         if (gainNode && audioCtx) {
             gainNode.gain.linearRampToValueAtTime(0.65, audioCtx.currentTime + 0.25);
         }
@@ -82,7 +77,7 @@ function triggerNode1() {
     }
 }
 
-// 3. 노드 1 -> 노드 2 화면 및 사운드 전환 처리
+// 3. 노드 1 -> 노드 2 화면 전환 시퀀스
 function finishDemo() {
     const node1 = document.getElementById('node-1');
     const node2 = document.getElementById('node-2');
@@ -99,7 +94,6 @@ function finishDemo() {
             node2.style.opacity = '1';
         }, 50);
 
-        // 빗소리를 과거의 둔탁한 잔상 톤으로 필터링 변환
         transitionAudioToPast();
     }, 1200);
 }
@@ -121,7 +115,6 @@ function transitionAudioToPast() {
 
     const now = audioCtx.currentTime;
     
-    // 주파수를 저역대(300Hz)로 감쇄시켜 둔탁하게 멀어지는 과거 시제 사운드 구현
     lowPassFilter.frequency.setValueAtTime(1100, now);
     lowPassFilter.frequency.exponentialRampToValueAtTime(300, now + 3.0);
 
@@ -133,7 +126,6 @@ function transitionAudioToPast() {
     startDripSynth();
 }
 
-// 물방울 합성음 생성 피치 엔진
 function playDripSound() {
     if (!audioCtx || audioCtx.state === 'suspended') return;
 
@@ -181,7 +173,7 @@ function handleNode2Wrong() {
     if (!feedback) return;
     feedback.classList.remove('is-hidden');
     feedback.style.color = '#f25c54';
-    feedback.innerHTML = "❌ Look outside/inside carefully! The rain has stopped now. But look at the water puddles on the ground!";
+    feedback.innerHTML = "❌ Look inside carefully! The rain has stopped now. But look at the wet water puddles left on the classroom floor!";
 }
 
 // 5. 노드 2 -> 노드 3 스톰 전조 화면 시퀀스 가동
@@ -198,12 +190,10 @@ function transitionToNode3() {
         node3.classList.remove('is-hidden');
         setTimeout(() => { node3.style.opacity = '1'; }, 50);
         
-        // 미래 시제 인지용 바람 필터 및 고주파 가속 신스 연동
         transitionAudioToFuturePredictive();
     }, 1200);
 }
 
-// 미래 예측 스톰 기류 주파수 변조 연출
 function transitionAudioToFuturePredictive() {
     if (!audioCtx || audioCtx.state === 'suspended') return;
     const now = audioCtx.currentTime;

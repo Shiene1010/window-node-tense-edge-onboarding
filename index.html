@@ -20,12 +20,21 @@
     <!-- NODE 1: 아파트 베란다 맥락 (현재진행) -->
     <div id="node-1" class="node-container">
         <div id="targetSentence" class="target-sentence">"It's raining outside right now."</div>
-        <div id="windowFrame" class="window-frame" onclick="triggerNode1()">
-            <div class="rain-bg" id="rainBg"></div>
-            <div class="curtain curtain-left"></div>
-            <div class="curtain curtain-right"></div>
-            <div class="guide-hint">커튼을 열어 확인하세요</div>
+        
+        <!-- 아늑한 방 안의 조명 효과가 추가된 프레임 -->
+        <div class="room-glow">
+            <div id="windowFrame" class="window-frame" onclick="triggerNode1()">
+                <!-- 창밖 폭우 레이어 고도화 -->
+                <div class="rain-bg" id="rainBg">
+                    <div class="heavy-rain-layer layer-1"></div>
+                    <div class="heavy-rain-layer layer-2"></div>
+                </div>
+                <div class="curtain curtain-left"></div>
+                <div class="curtain curtain-right"></div>
+                <div class="guide-hint">커튼을 열어 창밖을 확인하세요</div>
+            </div>
         </div>
+
         <div id="ccqPanel" class="ccq-panel">
             <div class="ccq-title">[CCQ] Is it raining NOW?</div>
             <button class="ccq-btn" onclick="finishDemo()">Yes, right now!</button>
@@ -35,19 +44,25 @@
     <!-- NODE 2: 교실 안 상황 (과거 시제 엣지) -->
     <div id="node-2" class="node-container is-hidden">
         <div class="classroom-viewport">
+            <!-- 맑아진 하늘과 눈부신 햇살/렌즈플레어 연출 -->
             <div class="sunny-sky" id="node2Sky"></div>
+            <div class="lens-flare"></div>
             <div class="sunlight-beam" id="node2Beam"></div>
+            
             <div class="classroom-window-frame">
                 <div class="window-glass">
+                    <!-- 햇빛에 증발하는 간헐적 빗방울 흔적 -->
                     <div class="rain-streak streak-1"></div>
                     <div class="rain-streak streak-2"></div>
                 </div>
             </div>
+            
+            <!-- 동적 물결이 일어나는 물웅덩이 인지 앵커 구역 -->
             <div class="water-puddles-container" id="puddle-trigger">
-                <div class="puddle puddle-1"></div>
-                <div class="puddle puddle-2"></div>
+                <div class="puddle puddle-1"><span class="ripple-wave wave-a"></span></div>
+                <div class="puddle puddle-2"><span class="ripple-wave wave-b"></span></div>
                 <span class="puddle-ripple"></span>
-                <div class="cognitive-hint">The ground is still wet...</div>
+                <div class="cognitive-hint">The ground is still wet... (흔적이 남아있음)</div>
             </div>
         </div>
         <div class="educational-panel">
@@ -68,19 +83,29 @@
     <!-- NODE 3: 하교 직전 교실 상황 (조건 및 미래 예측 시제 엣지) -->
     <div id="node-3" class="node-container is-hidden">
         <div class="classroom-viewport dynamic-storm-bg">
+            <!-- 급변하는 먹구름과 흐려지는 유리창 서리 연출 -->
             <div class="dark-clouds"></div>
+            <div class="foggy-glass-layer"></div>
             <div class="lightning-flash"></div>
+            
             <div class="classroom-window-frame storm-border">
                 <div class="window-glass">
+                    <!-- 휘날리는 바람 입자 -->
                     <div class="wind-particle particle-1"></div>
                     <div class="wind-particle particle-2"></div>
                 </div>
             </div>
+            
+            <!-- 시각적 개연성을 부여하는 기압계 UI 배치 -->
             <div class="predictive-indicator-box">
-                <div class="barometer-icon">⚠️</div>
-                <div class="cognitive-hint-alert">Look at those dark clouds gathering...</div>
+                <div class="barometer-gauge">
+                    <div class="barometer-pointer"></div>
+                    <div class="barometer-text">RAINY HIGH</div>
+                </div>
+                <div class="cognitive-hint-alert">Look at those dark clouds gathering... (징후 축적)</div>
             </div>
         </div>
+        
         <div class="educational-panel">
             <div class="target-sentence-box">
                 <h2 class="target-sentence">"If it keeps getting darker, it <span class="predictive-edge-highlight">is going to rain</span> again."</h2>
