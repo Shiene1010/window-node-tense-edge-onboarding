@@ -61,11 +61,12 @@ body {
     transform: translateY(20px);
 }
 
-/* --- NODE 1 스타일 시트 고도화 --- */
+/* --- NODE 1 스타일 시트 --- */
 .target-sentence {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    text-align: center;
     opacity: 0;
     transition: opacity 0.5s ease;
 }
@@ -121,7 +122,7 @@ body {
     padding: 12px 35px; border-radius: 25px; font-weight: bold; cursor: pointer;
 }
 
-/* --- NODE 2: 교실 뷰포트 인지 엔진 그래픽스 --- */
+/* --- NODE 2: 교실 뷰포트 스타일 --- */
 .classroom-viewport {
     position: relative;
     width: 100%;
@@ -158,7 +159,6 @@ body {
 }
 .window-glass { position: relative; width: 100%; height: 100%; overflow: hidden; }
 
-/* 빗방울 잔상 애니메이션 효과 */
 .rain-streak {
     position: absolute;
     background: rgba(255, 255, 255, 0.4);
@@ -175,7 +175,6 @@ body {
     100% { top: 100%; opacity: 0; }
 }
 
-/* 물웅덩이(Water Puddles) 바닥 디자인 */
 .water-puddles-container {
     position: absolute;
     bottom: 0; left: 0; width: 100%; height: 40%;
@@ -209,17 +208,95 @@ body {
     font-style: italic;
 }
 
-/* --- NODE 2 하단 교육 패널 및 옵션 배열 --- */
+/* --- NODE 3 스타일 디자인 --- */
+.dynamic-storm-bg {
+    background: #1f1a18 !important;
+}
+.dark-clouds {
+    position: absolute;
+    top: 10%; left: 10%; width: 80%; height: 45%;
+    background: linear-gradient(180deg, #2b323c 0%, #15181f 100%);
+    border-radius: 4px;
+    z-index: 1;
+    animation: cloudsGather 6s infinite alternate ease-in-out;
+}
+@keyframes cloudsGather {
+    0% { filter: brightness(1.0); }
+    100% { filter: brightness(0.6); }
+}
+
+.lightning-flash {
+    position: absolute;
+    top: 10%; left: 10%; width: 80%; height: 45%;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    animation: flashTrigger 7s infinite steps(1) 2s;
+}
+@keyframes flashTrigger {
+    0%, 92%, 100% { opacity: 0; }
+    93% { opacity: 0.6; }
+    94% { opacity: 0; }
+    96% { opacity: 0.8; }
+    97% { opacity: 0; }
+}
+
+.storm-border {
+    border-color: #3a2a22 !important;
+}
+
+.wind-particle {
+    position: absolute;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,200,0.2));
+    height: 1px;
+}
+.particle-1 { width: 100px; top: 30%; left: -100px; animation: windBlow 2.5s infinite linear; }
+.particle-2 { width: 140px; top: 60%; left: -140px; animation: windBlow 1.8s infinite linear 0.5s; }
+
+@keyframes windBlow {
+    0% { left: -150px; transform: skewY(-5deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { left: 110%; transform: skewY(-5deg); opacity: 0; }
+}
+
+.predictive-indicator-box {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 40%;
+    background: rgba(20, 20, 25, 0.85);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.barometer-icon {
+    font-size: 2rem;
+    animation: warningPulse 1.5s infinite ease-in-out;
+}
+@keyframes warningPulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
+}
+.cognitive-hint-alert {
+    margin-top: 5px; font-size: 0.85rem; color: #f25c54; font-weight: bold;
+}
+
+/* --- 교육용 글로벌 타이포그래피 공통 정의 --- */
 .educational-panel {
     width: 100%; max-width: 400px; text-align: center; margin-top: 25px;
 }
 .tense-edge-highlight {
     color: #ffd166; font-weight: 800; text-shadow: 0 0 10px rgba(255,209,102,0.3);
 }
-.time-anchor { color: #f25c54; text-decoration: underline; }
+.predictive-edge-highlight {
+    color: #f25c54; font-weight: 800; text-shadow: 0 0 12px rgba(242,92,84,0.4);
+}
+.time-anchor { color: #06d6a0; text-decoration: underline; }
+.time-anchor-future { color: #f25c54; font-weight: bold; text-decoration: underline; }
 
-.ccq-panel-node2 { margin-top: 15px; }
-.ccq-question { font-size: 1.1rem; margin-bottom: 15px; color: #ffffff; }
+.ccq-panel-node2, .ccq-panel-node3 { margin-top: 15px; }
+.ccq-question { font-size: 1.05rem; margin-bottom: 15px; color: #ffffff; line-height: 1.4; }
 .ccq-options { display: flex; flex-direction: column; gap: 10px; }
 
 .btn-ccq {
